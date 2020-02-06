@@ -77,20 +77,14 @@ class NMT(nn.Module):
         ###     Dropout Layer:
         ###         https://pytorch.org/docs/stable/nn.html#torch.nn.Dropout
 
-        #TODO: check if we have to use hidden_size in encoder
         self.encoder = nn.LSTM(input_size=embed_size, hidden_size=hidden_size,
                                bias=True, bidirectional=True)
-        #TODO: check input_size correctness
         self.decoder = nn.LSTMCell(input_size=embed_size+hidden_size,
                                    hidden_size=hidden_size, bias=True)
-
-        #TODO: figure out in_features size
         self.h_projection = nn.Linear(in_features=2*hidden_size,
                                       out_features=hidden_size, bias=False)
         self.c_projection = nn.Linear(in_features=2*hidden_size,
                                       out_features=hidden_size, bias=False)
-
-        # TODO: check these in/out shapes !!!!!
         self.att_projection = nn.Linear(in_features=2*hidden_size,
                                         out_features=hidden_size, bias=False)
         self.combined_output_projection = nn.Linear(in_features=3*hidden_size,
@@ -335,7 +329,6 @@ class NMT(nn.Module):
         dec_hidden, dec_cell = dec_state
 
         # dec_hidden is (b,h); enc_hiddens_proj is (b,src_len,h) and e_t is (b, src_len)
-        #TODO: figure out squeeze/unsqueeze correctness
         e_t = enc_hiddens_proj.bmm(dec_hidden.unsqueeze(dim=2)).squeeze(dim=2)
         ### END YOUR CODE
 
